@@ -1,0 +1,16 @@
+<div class="container">
+  <div class="iframe-container">
+    <iframe
+      #whitePlayerView
+      src="/chess-board"
+      (load)="resizeIFrameToFitContent(this.whitePlayerView)"
+    ></iframe>
+  </div>
+  <div class="iframe-container">
+    <iframe
+      #blackPlayerView
+      src="/chess-board"
+      (load)="resizeIFrameToFitContent(this.blackPlayerView)"
+    ></iframe>
+  </div>
+</div>

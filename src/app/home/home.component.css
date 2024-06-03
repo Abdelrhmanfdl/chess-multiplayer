@@ -1,0 +1,14 @@
+.container {
+  padding: 12px;
+  display: flex;
+  flex: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+iframe {
+  height: 520px;
+  width: 520px;
+  margin: auto;
+  border-radius: 8px;
+}
