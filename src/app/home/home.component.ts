@@ -18,15 +18,25 @@ export class HomeComponent implements AfterViewInit {
 
   turn: Player = Player.WHITE;
   isCheckMate: boolean = false;
+  stateKey = 'gameState';
 
   ngAfterViewInit(): void {
+    let storedState = localStorage.getItem(this.stateKey),
+      fen;
+    if (storedState) {
+      let storedStateParsed = JSON.parse(storedState);
+      fen = storedStateParsed.fen;
+      this.turn = storedStateParsed.turn;
+    }
     this.setupPostMessage(this.whitePlayerView, {
       messageType: GameEvent.SETUP,
       player: Player.WHITE,
+      fen,
     });
     this.setupPostMessage(this.blackPlayerView, {
       messageType: GameEvent.SETUP,
       player: Player.BLACK,
+      fen,
     });
 
     window.addEventListener('message', (event) => {
@@ -55,6 +65,7 @@ export class HomeComponent implements AfterViewInit {
   reset() {
     this.turn = Player.WHITE;
     this.isCheckMate = false;
+    localStorage.removeItem(this.stateKey);
     this.sendMessageToPlayer(Player.WHITE, { messageType: GameEvent.RESET });
     this.sendMessageToPlayer(Player.BLACK, { messageType: GameEvent.RESET });
   }
@@ -63,8 +74,16 @@ export class HomeComponent implements AfterViewInit {
     this.propagateMove(move);
     if (move.checkmate) {
       this.isCheckMate = true;
+      localStorage.removeItem(this.stateKey);
     } else {
       this.turn = this.turn == Player.WHITE ? Player.BLACK : Player.WHITE;
+      localStorage.setItem(
+        this.stateKey,
+        JSON.stringify({
+          turn: this.turn,
+          fen: move.fen,
+        })
+      );
     }
   }
 

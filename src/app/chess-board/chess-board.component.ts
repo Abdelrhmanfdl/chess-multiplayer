@@ -36,6 +36,7 @@ export class ChessBoardComponent implements OnInit {
   }
 
   setup(setupData: any) {
+    if (setupData.fen) this.ngxBoard.setFEN(setupData.fen);
     this.receivePlayerView(setupData.player);
   }
 
