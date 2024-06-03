@@ -1,16 +1,33 @@
 <div class="container">
-  <div class="iframe-container">
+  <div class="iframes-container">
     <iframe
       #whitePlayerView
       src="/chess-board"
       (load)="resizeIFrameToFitContent(this.whitePlayerView)"
     ></iframe>
-  </div>
-  <div class="iframe-container">
     <iframe
       #blackPlayerView
       src="/chess-board"
       (load)="resizeIFrameToFitContent(this.blackPlayerView)"
     ></iframe>
+  </div>
+
+  <div class="bottom-section">
+    <span *ngIf="isCheckMate" style="color: yellow; font-size: 1rem">
+      <span style="font-weight: bold">Checkmate!</span>{{ " " }}
+      <span [style]="{ color: this.turn.toString() }">{{
+        this.turn.toString()
+      }}</span>
+      won the game 🏆
+    </span>
+    <div class="buttons-panel">
+      <button
+        mat-raised-button
+        [color]="isCheckMate ? 'accent' : 'primary'"
+        (click)="reset()"
+      >
+        {{ isCheckMate ? "New Game" : "Reset" }}
+      </button>
+    </div>
   </div>
 </div>

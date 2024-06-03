@@ -28,6 +28,9 @@ export class ChessBoardComponent implements OnInit {
         case GameEvent.MOVE:
           this.processOpponentMove(event.data.move);
           break;
+        case GameEvent.RESET:
+          this.reset();
+          break;
       }
     });
   }
@@ -36,7 +39,7 @@ export class ChessBoardComponent implements OnInit {
     this.receivePlayerView(setupData.player);
   }
 
-  receivePlayerView(player: number) {
+  receivePlayerView(player: Player) {
     this.playerType = player;
     if (this.playerType === Player.BLACK) this.ngxBoard.reverse();
   }
@@ -49,8 +52,13 @@ export class ChessBoardComponent implements OnInit {
       window.parent.postMessage({ messageType: GameEvent.MOVE, move });
   }
 
-  processOpponentMove(move: MoveChange) {
+  private processOpponentMove(move: MoveChange) {
     this.ngxBoard.move((move as any).move);
+  }
+
+  reset() {
+    this.ngxBoard.reset();
+    if (!this.isWhitePlayer) this.ngxBoard.reverse();
   }
 
   get isWhitePlayer() {

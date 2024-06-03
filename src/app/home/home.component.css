@@ -1,7 +1,14 @@
 .container {
   padding: 12px;
   display: flex;
-  flex: row;
+  flex-direction: column;
+  align-items: center;
+}
+
+.iframes-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
   justify-content: space-around;
   flex-wrap: wrap;
 }
@@ -11,4 +18,15 @@ iframe {
   width: 520px;
   margin: auto;
   border-radius: 8px;
+}
+
+.bottom-section {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.buttons-panel button {
+  margin: 1rem 0.5rem;
 }

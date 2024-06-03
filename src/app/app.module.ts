@@ -7,6 +7,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { ChessBoardComponent } from './chess-board/chess-board.component';
 import { NgxChessBoardModule } from 'ngx-chess-board';
+import { MatButtonModule } from '@angular/material/button';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -20,6 +21,7 @@ const routes: Routes = [
     AppRoutingModule,
     RouterModule.forChild(routes),
     NgxChessBoardModule.forRoot(),
+    MatButtonModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

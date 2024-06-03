@@ -1,4 +1,5 @@
 import { Component, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
+import { MoveChange } from 'ngx-chess-board';
 import { GameEvent } from 'src/enums/GameEvent';
 import { Player } from 'src/enums/Player';
 
@@ -16,6 +17,7 @@ export class HomeComponent implements AfterViewInit {
     | undefined;
 
   turn: Player = Player.WHITE;
+  isCheckMate: boolean = false;
 
   ngAfterViewInit(): void {
     this.setupPostMessage(this.whitePlayerView, {
@@ -40,7 +42,7 @@ export class HomeComponent implements AfterViewInit {
   }
 
   private setupPostMessage(
-    iframe: ElementRef<HTMLIFrameElement> | undefined,
+    iframe: ElementRef<HTMLIFrameElement>,
     data: any
   ): void {
     const iframeElement = iframe?.nativeElement;
@@ -50,17 +52,41 @@ export class HomeComponent implements AfterViewInit {
     });
   }
 
-  processMove(move: MouseEvent) {
+  reset() {
+    this.turn = Player.WHITE;
+    this.isCheckMate = false;
+    this.sendMessageToPlayer(Player.WHITE, { messageType: GameEvent.RESET });
+    this.sendMessageToPlayer(Player.BLACK, { messageType: GameEvent.RESET });
+  }
+
+  private processMove(move: MoveChange) {
+    this.propagateMove(move);
+    if (move.checkmate) {
+      this.isCheckMate = true;
+    } else {
+      this.turn = this.turn == Player.WHITE ? Player.BLACK : Player.WHITE;
+    }
+  }
+
+  private propagateMove(move: MoveChange) {
+    this.sendMessageToPlayer(
+      this.turn == Player.WHITE ? Player.BLACK : Player.WHITE,
+      {
+        messageType: GameEvent.MOVE,
+        move,
+      }
+    );
+  }
+
+  private sendMessageToPlayer(player: Player, message: any) {
     const iframeElement = (
-      this.turn == Player.WHITE ? this.blackPlayerView : this.whitePlayerView
+      player == Player.WHITE ? this.whitePlayerView : this.blackPlayerView
     )?.nativeElement;
+    iframeElement?.contentWindow?.postMessage(message);
+  }
 
-    iframeElement?.contentWindow?.postMessage({
-      messageType: GameEvent.MOVE,
-      move,
-    });
-
-    this.turn = this.turn == Player.WHITE ? Player.BLACK : Player.WHITE;
+  get turnName() {
+    return this.turn === Player.WHITE ? 'White' : 'Black';
   }
 
   resizeIFrameToFitContent(iFrame: HTMLIFrameElement) {
