@@ -92,7 +92,7 @@ export class HomeComponent implements AfterViewInit {
       this.turn == Player.WHITE ? Player.BLACK : Player.WHITE,
       {
         messageType: GameEvent.MOVE,
-        move,
+        fen: move.fen,
       }
     );
   }

@@ -26,7 +26,7 @@ export class ChessBoardComponent implements OnInit {
           this.setup(event.data);
           break;
         case GameEvent.MOVE:
-          this.processOpponentMove(event.data.move);
+          this.processOpponentMove(event.data.fen);
           break;
         case GameEvent.RESET:
           this.reset();
@@ -53,8 +53,9 @@ export class ChessBoardComponent implements OnInit {
       window.parent.postMessage({ messageType: GameEvent.MOVE, move });
   }
 
-  private processOpponentMove(move: MoveChange) {
-    this.ngxBoard.move((move as any).move);
+  private processOpponentMove(updatedFen: string) {
+    this.ngxBoard.setFEN(updatedFen);
+    if (!this.isWhitePlayer) this.ngxBoard.reverse();
   }
 
   reset() {
