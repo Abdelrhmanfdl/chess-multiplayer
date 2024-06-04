@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
 .iframes-container {
@@ -23,10 +24,10 @@ iframe {
 .bottom-section {
   margin-top: 1rem;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
 }
 
 .buttons-panel button {
-  margin: 1rem 0.5rem;
+  /* margin: 1rem 0.5rem; */
 }

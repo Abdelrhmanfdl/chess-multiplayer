@@ -13,7 +13,10 @@
   </div>
 
   <div class="bottom-section">
-    <span *ngIf="isCheckMate" style="color: yellow; font-size: 1rem">
+    <span
+      *ngIf="isCheckMate"
+      style="color: yellow; font-size: 1rem; margin-inline-end: 0.5rem"
+    >
       <span style="font-weight: bold">Checkmate!</span>{{ " " }}
       <span [style]="{ color: this.turn.toString() }">{{
         this.turn.toString()
