@@ -1,0 +1,27 @@
+/* src/app/navbar/navbar.component.css */
+nav {
+  background-color: #333;
+  padding: 1rem;
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 1rem;
+}
+
+nav li {
+  display: inline;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+}
+
+nav ul li a.active-link {
+  color: --primary;
+  font-weight: bold;
+}

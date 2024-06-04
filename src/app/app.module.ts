@@ -3,23 +3,24 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { ChessBoardComponent } from './chess-board/chess-board.component';
 import { NgxChessBoardModule } from 'ngx-chess-board';
 import { MatButtonModule } from '@angular/material/button';
-
-const routes: Routes = [
-  { path: 'home', component: HomeComponent },
-  { path: 'chess-board', component: ChessBoardComponent },
-];
+import { NavbarComponent } from './ui/navbar/navbar.component';
+import { OnlineComponent } from './online/online.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, ChessBoardComponent],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    ChessBoardComponent,
+    NavbarComponent,
+    OnlineComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    RouterModule.forChild(routes),
     NgxChessBoardModule.forRoot(),
     MatButtonModule,
   ],
