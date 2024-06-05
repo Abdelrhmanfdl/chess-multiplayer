@@ -71,9 +71,9 @@ export class HomeComponent implements AfterViewInit {
     return this.gameService.gameState.checkmate;
   }
 
-  get turn(): Player | null {
+  get turn(): Player {
     // return this.gameService.gameState.turn;
-    if (!this.gameService.gameState.fen) return null;
+    if (!this.gameService.gameState.fen) return Player.WHITE;
     let splittedArr = this.gameService.gameState.fen.split(' ');
     return splittedArr[splittedArr.length - 5] == 'w'
       ? Player.WHITE

@@ -47,8 +47,9 @@ export class GameService {
   }
 
   reset() {
-    this.gameState.turn = Player.WHITE;
-    this.gameState.checkmate = false;
+    this._gameState.turn = Player.WHITE;
+    this._gameState.checkmate = false;
+    this._gameState.fen = null;
     this._boardsLits.forEach(({ iframe }) => {
       iframe.nativeElement?.contentWindow?.postMessage({
         messageType: GameEvent.RESET,
