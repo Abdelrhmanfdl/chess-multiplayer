@@ -1,0 +1,14 @@
+#panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 400px;
+  height: 100%;
+  /* border: 1px solid; */
+}
+
+#leave-btn {
+  align-self: center;
+  justify-self: flex-end;
+  width: 33%;
+}

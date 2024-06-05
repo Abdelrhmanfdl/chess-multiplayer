@@ -1,1 +1,14 @@
-<p>online works!</p>
+<div class="container">
+  <div *ngIf="isGameInitiated === false" class="menu-container">
+    <app-online-menu (joinedGame)="joinedGame($event)"></app-online-menu>
+  </div>
+  <app-online-room
+    style="width: 100%"
+    *ngIf="isGameInitiated"
+    [gameId]="gameId"
+    [gameObservable]="gameObservable"
+    [isCreator]="isCreator"
+    (leaveRoom)="leave()"
+  ></app-online-room>
+</div>
+<!-- reverse ! -->

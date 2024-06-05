@@ -1,0 +1,25 @@
+.id-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0.5rem;
+  border-radius: 10px;
+  width: 300px;
+  margin: 0.5rem auto;
+  background-color: #f9f9f979;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#game-id {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.copy-btn {
+  font-size: 0.8rem;
+  color: #fff;
+  background-color: #007bff;
+  cursor: pointer;
+}

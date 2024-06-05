@@ -1,0 +1,18 @@
+<div class="panel">
+  <div style="display: flex; flex-direction: row; align-items: start">
+    <mat-form-field class="example-full-width">
+      <mat-label>Game ID</mat-label>
+      <input #gameIdInput matInput />
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="joinGame(this.gameIdInput.value)"
+    >
+      Join
+    </button>
+  </div>
+  <button mat-raised-button color="accent" (click)="createGame()">
+    Create Game
+  </button>
+</div>
