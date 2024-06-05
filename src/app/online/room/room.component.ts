@@ -35,8 +35,10 @@ export class RoomComponent implements AfterViewInit {
     if (this._gameSubscription) this._gameSubscription.unsubscribe();
 
     this._gameSubscription = this._gameObservable.subscribe(
-      (gameStateUpdate: OnlineGameState) =>
-        this.processGameEvent(gameStateUpdate)
+      (gameStateUpdate: OnlineGameState | null) =>
+        gameStateUpdate === null
+          ? this.handleLeave()
+          : this.processGameEvent(gameStateUpdate)
     );
   }
 

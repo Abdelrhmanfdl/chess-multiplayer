@@ -24,10 +24,9 @@ export class OnlineComponent {
   }
 
   leave() {
-    this.ready = false;
+    this.onlineGameService.removeGame(this.gameId);
     this.gameId = null;
     this.gameObservable = null;
-    // TODO: if creator destroy the game in db
   }
 
   get isGameInitiated(): boolean {

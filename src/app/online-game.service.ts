@@ -52,4 +52,16 @@ export class OnlineGameService {
         console.log('Can not update game: ', e.message);
       });
   }
+
+  removeGame(gameId: string): Promise<void> {
+    return this.db
+      .object(`game/${gameId}`)
+      .remove()
+      .then(() => {
+        console.log(`game/${gameId}`, 'removed');
+      })
+      .catch((e) => {
+        console.log('Can not remove game: ', e.message);
+      });
+  }
 }
