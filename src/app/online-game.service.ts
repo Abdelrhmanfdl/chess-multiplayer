@@ -17,8 +17,10 @@ export class OnlineGameService {
       checkmate: false,
       ready: false,
     };
-    this.db.object(`game/${gameId}`).set(newGame);
-    return gameId;
+    return this.db
+      .object(`game/${gameId}`)
+      .set(newGame)
+      .then(() => gameId);
   }
 
   async joinGame(gameId: string): Promise<Observable<OnlineGameState>> {
