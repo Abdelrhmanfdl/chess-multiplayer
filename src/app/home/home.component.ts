@@ -47,10 +47,12 @@ export class HomeComponent implements AfterViewInit {
       switch (event.data.messageType) {
         case GameEvent.MOVE:
           this.gameService.processMove(event.data.move);
-          localStorage.setItem(
-            this.stateKey,
-            JSON.stringify(this.gameService.gameState)
-          );
+          if (!this.isCheckMate)
+            localStorage.setItem(
+              this.stateKey,
+              JSON.stringify(this.gameService.gameState)
+            );
+          else localStorage.removeItem(this.stateKey);
           break;
       }
     });
