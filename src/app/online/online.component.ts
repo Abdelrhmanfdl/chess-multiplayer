@@ -17,7 +17,6 @@ export class OnlineComponent {
   constructor(private onlineGameService: OnlineGameService) {}
 
   joinedGame({ gameObservable, isCreator, gameId }: JoinOnlineGameEvent) {
-    console.log('joinedEvent', isCreator, gameId);
     this.gameId = gameId;
     this.gameObservable = gameObservable;
     this.isCreator = isCreator;

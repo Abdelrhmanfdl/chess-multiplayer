@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
-import { Observable } from 'rxjs';
+import { Observable, firstValueFrom, of, switchMap } from 'rxjs';
+import { JoinError } from 'src/enums/JoinError';
 import { OnlineGameState } from 'src/types/OnlineGameState';
 
 @Injectable({
@@ -20,8 +21,23 @@ export class OnlineGameService {
     return gameId;
   }
 
-  joinGame(gameId: string): Observable<OnlineGameState> {
-    // TODO: assert not ready
+  async joinGame(gameId: string): Promise<Observable<OnlineGameState>> {
+    const result = await firstValueFrom(
+      this.db.object<OnlineGameState>(`game/${gameId}`).valueChanges()
+    );
+
+    if (!result) {
+      const err = new Error('game does not exist');
+      err.cause = { type: JoinError.NOT_EXIST };
+      throw err;
+    }
+
+    if (result.ready) {
+      const err = new Error('game is full');
+      err.cause = { type: JoinError.FULL };
+      throw err;
+    }
+
     return this.db.object(`game/${gameId}`).valueChanges();
   }
 

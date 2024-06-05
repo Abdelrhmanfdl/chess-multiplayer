@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OnlineGameService } from 'src/app/online-game.service';
+import { JoinError } from 'src/enums/JoinError';
 import { JoinOnlineGameEvent } from 'src/types/JoinOnlineGameEvent';
 import { OnlineGameState } from 'src/types/OnlineGameState';
 
@@ -23,11 +24,19 @@ export class MenuComponent {
   }
 
   joinGame(gameId: string) {
-    const gameObservable = this.observeGame(gameId);
-    this.joinedGame.emit({ gameObservable, isCreator: false, gameId });
+    this.observeGame(gameId)
+      .then((gameObservable: Observable<OnlineGameState>) => {
+        this.joinedGame.emit({ gameObservable, isCreator: false, gameId });
+      })
+      .catch((err) => {
+        if (err.cause.type == JoinError.NOT_EXIST)
+          alert('Game does not exist, you can create one');
+        else if (err.cause.type == JoinError.FULL)
+          alert('Game is already full');
+      });
   }
 
-  private observeGame(gameId): Observable<OnlineGameState> {
+  private async observeGame(gameId): Promise<Observable<OnlineGameState>> {
     return this.onlineGameService.joinGame(gameId);
   }
 }
