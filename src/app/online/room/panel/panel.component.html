@@ -1,14 +1,39 @@
 <div id="panel">
   <app-online-game-id [gameId]="gameId"></app-online-game-id>
-  <span *ngIf="playerType" class="know-your-type">
-    You are the
-    <span
-      class="player-color"
-      [style]="{ color: this.isWhitePlayer ? 'white' : 'black' }"
-      >{{ this.playerType.toString() }}</span
+  <div>
+    <div *ngIf="playerType" class="know-your-type">
+      You are the
+      <span
+        class="player-color"
+        [style]="{ color: this.isWhitePlayer ? 'white' : 'black' }"
+        >{{ this.playerType.toString() }}</span
+      >
+      player
+    </div>
+    <br />
+    <div
+      *ngIf="amIWinner"
+      style="
+        text-align: center;
+        color: yellow;
+        font-size: 1rem;
+        margin-inline-end: 0.5rem;
+      "
     >
-    player
-  </span>
+      <span style="font-weight: bold">Checkmate!</span>{{ " " }} You won 🏆
+    </div>
+    <div
+      *ngIf="amILoser"
+      style="
+        text-align: center;
+        color: darkgoldenrod;
+        font-size: 1rem;
+        margin-inline-end: 0.5rem;
+      "
+    >
+      <span style="font-weight: bold">Checkmate!</span>{{ " " }} You lost ☹️
+    </div>
+  </div>
   <div class="buttons-panel">
     <button
       mat-raised-button

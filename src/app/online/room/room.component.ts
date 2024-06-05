@@ -108,6 +108,10 @@ export class RoomComponent implements AfterViewInit {
     return this.gameService.gameState.checkmate;
   }
 
+  get turn(): Player {
+    return this.gameService.gameState.turn;
+  }
+
   handleLeave() {
     this.leaveRoom.emit();
   }
