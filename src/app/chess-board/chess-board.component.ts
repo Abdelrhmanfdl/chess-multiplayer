@@ -23,12 +23,15 @@ export class ChessBoardComponent implements OnInit {
       }
       switch (event.data.messageType) {
         case GameEvent.SETUP:
+          console.log(`board ${this.playerType} got SETUP`, event.data);
           this.setup(event.data);
           break;
         case GameEvent.MOVE:
+          console.log(`board ${this.playerType} got MOVE`, event.data);
           this.processOpponentMove(event.data.fen);
           break;
         case GameEvent.RESET:
+          console.log(`board ${this.playerType} got RESET`, event.data);
           this.reset();
           break;
       }

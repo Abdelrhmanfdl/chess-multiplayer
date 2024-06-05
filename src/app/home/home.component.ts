@@ -2,6 +2,7 @@ import { Component, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
 import { MoveChange } from 'ngx-chess-board';
 import { GameEvent } from 'src/enums/GameEvent';
 import { Player } from 'src/enums/Player';
+import { GameService } from '../services/game.service';
 
 @Component({
   selector: 'app-home',
@@ -16,96 +17,60 @@ export class HomeComponent implements AfterViewInit {
     | ElementRef<HTMLIFrameElement>
     | undefined;
 
-  turn: Player = Player.WHITE;
-  isCheckMate: boolean = false;
   stateKey = 'gameState';
 
+  constructor(private gameService: GameService) {}
+
   ngAfterViewInit(): void {
-    let storedState = localStorage.getItem(this.stateKey),
-      fen;
-    if (storedState) {
-      let storedStateParsed = JSON.parse(storedState);
-      fen = storedStateParsed.fen;
-      this.turn = storedStateParsed.turn;
-    }
-    this.setupPostMessage(this.whitePlayerView, {
-      messageType: GameEvent.SETUP,
-      player: Player.WHITE,
-      fen,
-    });
-    this.setupPostMessage(this.blackPlayerView, {
-      messageType: GameEvent.SETUP,
-      player: Player.BLACK,
-      fen,
-    });
+    this.gameService.boards = [
+      {
+        iframe: this.whitePlayerView,
+        playerType: Player.WHITE,
+      },
+      {
+        iframe: this.blackPlayerView,
+        playerType: Player.BLACK,
+      },
+    ];
+
+    let fen, turn;
+    try {
+      let storedState = JSON.parse(localStorage.getItem(this.stateKey));
+      fen = storedState.fen;
+      turn = storedState.turn;
+    } catch {}
+
+    this.gameService.setupBoards(fen);
 
     window.addEventListener('message', (event) => {
-      if (event.origin !== window.origin) {
-        return;
-      }
+      if (event.origin !== window.origin) return;
       switch (event.data.messageType) {
         case GameEvent.MOVE:
-          this.processMove(event.data.move);
+          this.gameService.processMove(event.data.move);
+          localStorage.setItem(
+            this.stateKey,
+            JSON.stringify(this.gameService.gameState)
+          );
           break;
       }
     });
   }
 
-  private setupPostMessage(
-    iframe: ElementRef<HTMLIFrameElement>,
-    data: any
-  ): void {
-    const iframeElement = iframe?.nativeElement;
-
-    iframeElement?.addEventListener('load', () => {
-      iframeElement.contentWindow?.postMessage(data);
-    });
-  }
-
   reset() {
-    this.turn = Player.WHITE;
-    this.isCheckMate = false;
+    this.gameService.reset();
     localStorage.removeItem(this.stateKey);
-    this.sendMessageToPlayer(Player.WHITE, { messageType: GameEvent.RESET });
-    this.sendMessageToPlayer(Player.BLACK, { messageType: GameEvent.RESET });
   }
 
-  private processMove(move: MoveChange) {
-    this.propagateMove(move);
-    if (move.checkmate) {
-      this.isCheckMate = true;
-      localStorage.removeItem(this.stateKey);
-    } else {
-      this.turn = this.turn == Player.WHITE ? Player.BLACK : Player.WHITE;
-      localStorage.setItem(
-        this.stateKey,
-        JSON.stringify({
-          turn: this.turn,
-          fen: move.fen,
-        })
-      );
-    }
+  get isCheckMate(): boolean {
+    return this.gameService.gameState.checkmate;
   }
 
-  private propagateMove(move: MoveChange) {
-    this.sendMessageToPlayer(
-      this.turn == Player.WHITE ? Player.BLACK : Player.WHITE,
-      {
-        messageType: GameEvent.MOVE,
-        fen: move.fen,
-      }
-    );
+  get turn(): Player {
+    return this.gameService.gameState.turn;
   }
 
-  private sendMessageToPlayer(player: Player, message: any) {
-    const iframeElement = (
-      player == Player.WHITE ? this.whitePlayerView : this.blackPlayerView
-    )?.nativeElement;
-    iframeElement?.contentWindow?.postMessage(message);
-  }
-
-  get turnName() {
-    return this.turn === Player.WHITE ? 'White' : 'Black';
+  get turnName(): string {
+    return this.gameService.gameState.turn === Player.WHITE ? 'White' : 'Black';
   }
 
   resizeIFrameToFitContent(iFrame: HTMLIFrameElement) {
