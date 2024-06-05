@@ -9,7 +9,16 @@
     >
     player
   </span>
-  <button id="leave-btn" mat-stroked-button (click)="handleLeave()">
-    Leave
-  </button>
+  <div class="buttons-panel">
+    <button
+      mat-raised-button
+      [color]="isCheckmate ? 'accent' : 'primary'"
+      (click)="handleReset()"
+    >
+      {{ isCheckmate ? "New Game" : "Reset" }}
+    </button>
+    <button id="leave-btn" mat-stroked-button (click)="handleLeave()">
+      Leave
+    </button>
+  </div>
 </div>

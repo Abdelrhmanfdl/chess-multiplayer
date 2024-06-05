@@ -9,7 +9,13 @@ import { Player } from 'src/enums/Player';
 export class PanelComponent {
   @Input() gameId: string = null;
   @Input() playerType: Player | null = null;
+  @Input() isCheckmate: boolean;
+  @Output() reset = new EventEmitter<void>();
   @Output() leave = new EventEmitter<void>();
+
+  handleReset() {
+    this.reset.emit();
+  }
 
   handleLeave() {
     this.leave.emit();

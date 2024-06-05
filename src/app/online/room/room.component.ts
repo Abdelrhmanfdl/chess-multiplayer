@@ -75,7 +75,10 @@ export class RoomComponent implements AfterViewInit {
   }
 
   private processGameEvent({ fen, ready, checkmate }: OnlineGameState) {
-    if (this.gameService.gameState.fen !== fen)
+    if (
+      this.gameService.gameState.fen !== fen ||
+      this.gameService.gameState.checkmate !== checkmate
+    )
       this.handleFenUpdate({ fen, checkmate });
     if (this._isReady !== ready) this.handleReadinessUpdate({ ready });
   }
@@ -108,5 +111,14 @@ export class RoomComponent implements AfterViewInit {
 
   handleLeave() {
     this.leaveRoom.emit();
+  }
+
+  handleReset() {
+    this.gameService.reset();
+    this.onlineGameService.updateGame(this.gameId, {
+      fen: null,
+      checkmate: false,
+      turn: Player.WHITE,
+    });
   }
 }

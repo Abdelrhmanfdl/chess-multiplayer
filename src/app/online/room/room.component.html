@@ -10,6 +10,8 @@
   <app-online-room-panel
     [gameId]="gameId"
     [playerType]="playerType"
+    [isCheckmate]="isCheckmate"
     (leave)="handleLeave()"
+    (reset)="handleReset()"
   ></app-online-room-panel>
 </div>

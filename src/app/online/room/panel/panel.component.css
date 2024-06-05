@@ -13,6 +13,12 @@
   width: 33%;
 }
 
+.buttons-panel {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
 .know-your-type {
   color: darkgray;
   font-size: 1rem;
