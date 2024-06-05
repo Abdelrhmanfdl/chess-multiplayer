@@ -1,5 +1,15 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
+import { GameService } from 'src/app/services/game.service';
+import { GameEvent } from 'src/enums/GameEvent';
 import { Player } from 'src/enums/Player';
 import { OnlineGameState } from 'src/types/OnlineGameState';
 
@@ -8,7 +18,8 @@ import { OnlineGameState } from 'src/types/OnlineGameState';
   templateUrl: './room.component.html',
   styleUrls: ['./room.component.css'],
 })
-export class RoomComponent {
+export class RoomComponent implements AfterViewInit {
+  @ViewChild('board') boardView: ElementRef<HTMLIFrameElement> | undefined;
   @Input() gameId: string | null = null;
   @Input() isCreator: boolean = false;
   _gameObservable: Observable<OnlineGameState> | null = null;
@@ -33,6 +44,29 @@ export class RoomComponent {
     );
   }
 
+  constructor(private gameService: GameService) {}
+
+  ngAfterViewInit(): void {
+    console.warn(this.boardView);
+    this.gameService.boards = [
+      {
+        iframe: this.boardView,
+        playerType: this.playerType,
+      },
+    ];
+
+    this.gameService.setupBoards();
+
+    window.addEventListener('message', (event) => {
+      if (event.origin !== window.origin) return;
+      switch (event.data.messageType) {
+        case GameEvent.MOVE:
+          this.gameService.processMove(event.data.move);
+          break;
+      }
+    });
+  }
+
   private processGameEvent({ fen, ready, checkmate }: OnlineGameState) {
     if (this.gameState?.fen !== fen) this.handleFenUpdate(fen);
     if (this.gameState?.ready !== ready) this.handleReadinessUpdate(ready);
@@ -53,6 +87,10 @@ export class RoomComponent {
   private handleCheckmateUpdate(checkmateUpdate: boolean) {
     this.gameState.checkmate = checkmateUpdate;
     //TODO: show message
+  }
+
+  get playerType(): Player {
+    return this.isCreator ? Player.WHITE : Player.BLACK;
   }
 
   get isGameReady(): boolean {

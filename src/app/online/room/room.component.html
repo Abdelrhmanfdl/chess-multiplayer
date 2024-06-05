@@ -2,13 +2,14 @@
   <div class="iframe-container">
     <iframe
       #board
-      *ngIf="isGameReady"
+      [hidden]="!isGameReady"
       class="chess-board"
       src="/chess-board"
     ></iframe>
   </div>
   <app-online-room-panel
     [gameId]="gameId"
+    [playerType]="playerType"
     (leave)="handleLeave()"
   ></app-online-room-panel>
 </div>

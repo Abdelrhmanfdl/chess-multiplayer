@@ -1,5 +1,14 @@
 <div id="panel">
   <app-online-game-id [gameId]="gameId"></app-online-game-id>
+  <span *ngIf="playerType" class="know-your-type">
+    You are the
+    <span
+      class="player-color"
+      [style]="{ color: this.isWhitePlayer ? 'white' : 'black' }"
+      >{{ this.playerType.toString() }}</span
+    >
+    player
+  </span>
   <button id="leave-btn" mat-stroked-button (click)="handleLeave()">
     Leave
   </button>
