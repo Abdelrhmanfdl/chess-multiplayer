@@ -4,12 +4,14 @@
       #whitePlayerView
       src="/chess-board"
       class="chess-board"
+      [class]="{ 'active-turn': isWhiteTurn }"
       (load)="resizeIFrameToFitContent(this.whitePlayerView)"
     ></iframe>
     <iframe
       #blackPlayerView
       src="/chess-board"
       class="chess-board"
+      [class]="{ 'active-turn': isBlackTurn }"
       (load)="resizeIFrameToFitContent(this.blackPlayerView)"
     ></iframe>
   </div>

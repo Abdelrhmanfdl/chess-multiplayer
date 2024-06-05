@@ -18,6 +18,11 @@ iframe.chess-board {
   width: 520px;
   margin: auto;
   border-radius: 8px;
+  border-style: solid;
+}
+
+iframe.chess-board.active-turn {
+  border-color: #f44336be;
 }
 
 .iframe-container {

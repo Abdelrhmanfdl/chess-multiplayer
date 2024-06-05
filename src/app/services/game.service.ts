@@ -14,6 +14,13 @@ export class GameService {
 
   constructor() {}
 
+  initState(gameState: OnlineGameState) {
+    if ('turn' in gameState) this._gameState.turn = gameState.turn;
+    if ('fen' in gameState) this._gameState.fen = gameState.fen;
+    if ('checkmate' in gameState)
+      this._gameState.checkmate = gameState.checkmate;
+  }
+
   setupBoards(fen?: string) {
     this._boardsLits.forEach(({ iframe, playerType }) => {
       const iframeElement = iframe?.nativeElement;

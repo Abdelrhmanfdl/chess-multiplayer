@@ -4,6 +4,7 @@
       #board
       [hidden]="!isGameReady"
       class="chess-board"
+      [class]="{ 'active-turn': turn === playerType && isGameReady }"
       src="/chess-board"
     ></iframe>
   </div>
