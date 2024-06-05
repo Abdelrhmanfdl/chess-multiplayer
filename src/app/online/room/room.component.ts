@@ -75,7 +75,7 @@ export class RoomComponent implements AfterViewInit {
     });
   }
 
-  private processGameEvent({ fen, ready, checkmate }: OnlineGameState) {
+  private processGameEvent({ fen, ready, checkmate, turn }: OnlineGameState) {
     if (
       this.gameService.gameState.fen !== fen ||
       this.gameService.gameState.checkmate !== checkmate
@@ -91,7 +91,7 @@ export class RoomComponent implements AfterViewInit {
     fen: string;
     checkmate: boolean;
   }) {
-    this.gameService.processMove({ fen, checkmate });
+    if (this.isGameReady) this.gameService.processMove({ fen, checkmate });
   }
 
   private handleReadinessUpdate({ ready }: { ready: boolean }) {

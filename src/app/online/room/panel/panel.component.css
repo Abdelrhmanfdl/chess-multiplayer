@@ -28,3 +28,23 @@
 .know-your-type .player-color {
   font-size: 1.2rem;
 }
+
+.your-turn {
+  color: white;
+  background-color: #f44336be;
+  text-align: center;
+  align-self: center;
+  width: max-content;
+  padding: 10px;
+  /* animation: scale 10s infinite ease-in-out; */
+}
+
+@keyframes scale {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}

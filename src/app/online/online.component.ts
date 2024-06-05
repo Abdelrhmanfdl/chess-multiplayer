@@ -3,6 +3,7 @@ import { OnlineGameState } from 'src/types/OnlineGameState';
 import { OnlineGameService } from '../online-game.service';
 import { JoinOnlineGameEvent } from 'src/types/JoinOnlineGameEvent';
 import { Observable } from 'rxjs';
+import { Player } from 'src/enums/Player';
 
 @Component({
   selector: 'app-online',
@@ -34,6 +35,10 @@ export class OnlineComponent {
   }
 
   set ready(isReady: boolean) {
-    this.onlineGameService.updateGame(this.gameId, { ready: isReady });
+    this.onlineGameService.updateGame(this.gameId, {
+      ready: isReady,
+      turn: Player.WHITE,
+      checkmate: false,
+    });
   }
 }

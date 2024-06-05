@@ -11,6 +11,7 @@ export class PanelComponent {
   @Input() playerType: Player | null = null;
   @Input() turn: Player;
   @Input() isCheckmate: boolean;
+  @Input() isGameReady: boolean;
   @Output() reset = new EventEmitter<void>();
   @Output() leave = new EventEmitter<void>();
 
@@ -27,14 +28,14 @@ export class PanelComponent {
   }
 
   get isMyTurn(): boolean {
-    return this.turn == this.playerType;
+    return this.isGameReady && this.turn == this.playerType;
   }
 
   get amIWinner(): boolean {
-    return this.isCheckmate && this.isMyTurn;
+    return this.isGameReady && this.isCheckmate && this.isMyTurn;
   }
 
   get amILoser(): boolean {
-    return this.isCheckmate && !this.isMyTurn;
+    return this.isGameReady && this.isCheckmate && !this.isMyTurn;
   }
 }

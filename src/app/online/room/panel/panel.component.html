@@ -34,6 +34,9 @@
       <span style="font-weight: bold">Checkmate!</span>{{ " " }} You lost ☹️
     </div>
   </div>
+  <div [style]="{ opacity: isMyTurn ? '1' : '0' }" class="your-turn">
+    <span> Your Turn </span>
+  </div>
   <div class="buttons-panel">
     <button
       mat-raised-button
