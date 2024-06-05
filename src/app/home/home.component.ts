@@ -18,7 +18,6 @@ export class HomeComponent implements AfterViewInit {
     | undefined;
 
   stateKey = 'gameState';
-  storageLoaded: boolean = false;
 
   constructor(private gameService: GameService) {}
 
@@ -43,7 +42,6 @@ export class HomeComponent implements AfterViewInit {
 
     this.gameService.setupBoards(fen);
     this.gameService.initState({ turn });
-    this.storageLoaded = true;
 
     window.addEventListener('message', (event) => {
       if (event.origin !== window.origin) return;
@@ -73,20 +71,21 @@ export class HomeComponent implements AfterViewInit {
     return this.gameService.gameState.checkmate;
   }
 
-  get turn(): Player {
-    return this.gameService.gameState.turn;
+  get turn(): Player | null {
+    // return this.gameService.gameState.turn;
+    if (!this.gameService.gameState.fen) return null;
+    let splittedArr = this.gameService.gameState.fen.split(' ');
+    return splittedArr[splittedArr.length - 5] == 'w'
+      ? Player.WHITE
+      : Player.BLACK;
   }
 
   get isWhiteTurn(): boolean {
-    return (
-      this.storageLoaded && this.gameService.gameState.turn === Player.WHITE
-    );
+    return this.gameService.gameState.turn === Player.WHITE;
   }
 
   get isBlackTurn(): boolean {
-    return (
-      this.storageLoaded && this.gameService.gameState.turn === Player.BLACK
-    );
+    return this.gameService.gameState.turn === Player.BLACK;
   }
 
   resizeIFrameToFitContent(iFrame: HTMLIFrameElement) {

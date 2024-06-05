@@ -10,7 +10,7 @@ type BoardData = { iframe: ElementRef<HTMLIFrameElement>; playerType: Player };
 })
 export class GameService {
   private _boardsLits: BoardData[];
-  private _gameState: OnlineGameState = { turn: Player.WHITE };
+  private _gameState: OnlineGameState = {};
 
   constructor() {}
 

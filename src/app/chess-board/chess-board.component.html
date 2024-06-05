@@ -1,7 +1,7 @@
 <ngx-chess-board
   #board
   [darkDisabled]="this.isWhitePlayer"
-  [lightDisabled]="!this.isWhitePlayer"
+  [lightDisabled]="this.isBlackPlayer"
   [showLastMove]="false"
   (moveChange)="onMove($event)"
 ></ngx-chess-board>

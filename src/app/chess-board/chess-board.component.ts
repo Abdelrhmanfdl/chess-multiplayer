@@ -28,7 +28,8 @@ export class ChessBoardComponent implements OnInit {
           break;
         case GameEvent.MOVE:
           console.log(`board ${this.playerType} got MOVE`, event.data);
-          this.processOpponentMove(event.data.fen);
+          if (event.data.fen) this.processOpponentMove(event.data.fen);
+          else this.reset();
           break;
         case GameEvent.RESET:
           console.log(`board ${this.playerType} got RESET`, event.data);
@@ -68,5 +69,9 @@ export class ChessBoardComponent implements OnInit {
 
   get isWhitePlayer() {
     return this.playerType === Player.WHITE;
+  }
+
+  get isBlackPlayer() {
+    return this.playerType === Player.BLACK;
   }
 }
