@@ -1,5 +1,4 @@
 import { ElementRef, Injectable } from '@angular/core';
-import { MoveChange } from 'ngx-chess-board';
 import { GameEvent } from 'src/enums/GameEvent';
 import { Player } from 'src/enums/Player';
 import { OnlineGameState } from 'src/types/OnlineGameState';
@@ -28,11 +27,11 @@ export class GameService {
     });
   }
 
-  processMove(move: MoveChange) {
-    this._gameState.checkmate = move.checkmate;
-    this._gameState.fen = move.fen;
+  processMove({ fen, checkmate }: { fen: string; checkmate: boolean }) {
+    this._gameState.checkmate = checkmate;
+    this._gameState.fen = fen;
     this.propagateStateToBoards();
-    if (move.checkmate) {
+    if (checkmate) {
       this._gameState.checkmate = true;
     } else {
       this._gameState.turn =

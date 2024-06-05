@@ -46,7 +46,10 @@ export class HomeComponent implements AfterViewInit {
       if (event.origin !== window.origin) return;
       switch (event.data.messageType) {
         case GameEvent.MOVE:
-          this.gameService.processMove(event.data.move);
+          this.gameService.processMove({
+            fen: event.data.move.fen,
+            checkmate: event.data.move.checkmate,
+          });
           if (!this.isCheckMate)
             localStorage.setItem(
               this.stateKey,

@@ -8,6 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
+import { OnlineGameService } from 'src/app/online-game.service';
 import { GameService } from 'src/app/services/game.service';
 import { GameEvent } from 'src/enums/GameEvent';
 import { Player } from 'src/enums/Player';
@@ -23,28 +24,26 @@ export class RoomComponent implements AfterViewInit {
   @Input() gameId: string | null = null;
   @Input() isCreator: boolean = false;
   _gameObservable: Observable<OnlineGameState> | null = null;
-  gameState: OnlineGameState = {};
-  gameSubscription: Subscription = null;
+  _gameSubscription: Subscription = null;
+  _isReady: boolean = false;
   @Output() leaveRoom = new EventEmitter<void>();
 
   @Input() set gameObservable(newGameObservable) {
     if (newGameObservable === this._gameObservable) return;
 
     this._gameObservable = newGameObservable;
-    if (this.gameSubscription) this.gameSubscription.unsubscribe();
+    if (this._gameSubscription) this._gameSubscription.unsubscribe();
 
-    this.gameSubscription = this._gameObservable.subscribe(
-      (gameStateUpdate: OnlineGameState) => {
-        console.log(
-          `gameId ${this.gameId} | isCreator ${this.isCreator} | 'new data: `,
-          gameStateUpdate
-        );
-        this.processGameEvent(gameStateUpdate);
-      }
+    this._gameSubscription = this._gameObservable.subscribe(
+      (gameStateUpdate: OnlineGameState) =>
+        this.processGameEvent(gameStateUpdate)
     );
   }
 
-  constructor(private gameService: GameService) {}
+  constructor(
+    private gameService: GameService,
+    private onlineGameService: OnlineGameService
+  ) {}
 
   ngAfterViewInit(): void {
     console.warn(this.boardView);
@@ -61,32 +60,38 @@ export class RoomComponent implements AfterViewInit {
       if (event.origin !== window.origin) return;
       switch (event.data.messageType) {
         case GameEvent.MOVE:
-          this.gameService.processMove(event.data.move);
+          let move = event.data.move;
+          this.gameService.processMove({
+            fen: move.fen,
+            checkmate: move.checkmate,
+          });
+          this.onlineGameService.updateGame(
+            this.gameId,
+            this.gameService.gameState
+          );
           break;
       }
     });
   }
 
   private processGameEvent({ fen, ready, checkmate }: OnlineGameState) {
-    if (this.gameState?.fen !== fen) this.handleFenUpdate(fen);
-    if (this.gameState?.ready !== ready) this.handleReadinessUpdate(ready);
-    if (this.gameState?.checkmate !== checkmate)
-      this.handleCheckmateUpdate(checkmate);
+    if (this.gameService.gameState.fen !== fen)
+      this.handleFenUpdate({ fen, checkmate });
+    if (this._isReady !== ready) this.handleReadinessUpdate({ ready });
   }
 
-  private handleFenUpdate(fenUpdate: string) {
-    this.gameState.fen = fenUpdate;
-    //TODO: message to board with new fen
+  private handleFenUpdate({
+    fen,
+    checkmate,
+  }: {
+    fen: string;
+    checkmate: boolean;
+  }) {
+    this.gameService.processMove({ fen, checkmate });
   }
 
-  private handleReadinessUpdate(readyUpdate: boolean) {
-    this.gameState.ready = readyUpdate;
-    //TODO: update UI, either show menu or chess board
-  }
-
-  private handleCheckmateUpdate(checkmateUpdate: boolean) {
-    this.gameState.checkmate = checkmateUpdate;
-    //TODO: show message
+  private handleReadinessUpdate({ ready }: { ready: boolean }) {
+    this._isReady = ready;
   }
 
   get playerType(): Player {
@@ -94,11 +99,11 @@ export class RoomComponent implements AfterViewInit {
   }
 
   get isGameReady(): boolean {
-    return this.gameState.ready;
+    return this._isReady;
   }
 
   get isCheckmate(): boolean {
-    return this.gameState?.checkmate;
+    return this.gameService.gameState.checkmate;
   }
 
   handleLeave() {
