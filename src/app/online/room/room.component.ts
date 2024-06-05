@@ -46,7 +46,6 @@ export class RoomComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    console.warn(this.boardView);
     this.gameService.boards = [
       {
         iframe: this.boardView,
