@@ -81,11 +81,16 @@ export class HomeComponent implements AfterViewInit {
   }
 
   get isWhiteTurn(): boolean {
-    return this.gameService.gameState.turn === Player.WHITE;
+    return this.turn === Player.WHITE;
   }
 
   get isBlackTurn(): boolean {
-    return this.gameService.gameState.turn === Player.BLACK;
+    return this.turn === Player.BLACK;
+  }
+
+  get winner(): Player | null {
+    if (!this.gameService.gameState.checkmate) return null;
+    return this.turn === Player.BLACK ? Player.WHITE : Player.BLACK;
   }
 
   resizeIFrameToFitContent(iFrame: HTMLIFrameElement) {

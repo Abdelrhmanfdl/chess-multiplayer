@@ -32,10 +32,10 @@ export class PanelComponent {
   }
 
   get amIWinner(): boolean {
-    return this.isGameReady && this.isCheckmate && this.isMyTurn;
+    return this.isGameReady && this.isCheckmate && !this.isMyTurn;
   }
 
   get amILoser(): boolean {
-    return this.isGameReady && this.isCheckmate && !this.isMyTurn;
+    return this.isGameReady && this.isCheckmate && this.isMyTurn;
   }
 }
