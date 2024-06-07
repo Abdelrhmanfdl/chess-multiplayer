@@ -19,6 +19,8 @@ export class GameService {
     if ('fen' in gameState) this._gameState.fen = gameState.fen;
     if ('checkmate' in gameState)
       this._gameState.checkmate = gameState.checkmate;
+
+    this.setupBoards(gameState.fen);
   }
 
   setupBoards(fen?: string) {

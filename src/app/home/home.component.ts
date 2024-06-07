@@ -40,8 +40,7 @@ export class HomeComponent implements AfterViewInit {
       turn = storedState.turn;
     } catch {}
 
-    this.gameService.setupBoards(fen);
-    this.gameService.initState({ turn });
+    this.gameService.initState({ turn, fen });
 
     window.addEventListener('message', (event) => {
       if (event.origin !== window.origin) return;
@@ -71,9 +70,9 @@ export class HomeComponent implements AfterViewInit {
     return this.gameService.gameState.checkmate;
   }
 
-  get turn(): Player {
+  get turn(): Player | null {
     // return this.gameService.gameState.turn;
-    if (!this.gameService.gameState.fen) return Player.WHITE;
+    if (!this.gameService.gameState.fen) return null;
     let splittedArr = this.gameService.gameState.fen.split(' ');
     return splittedArr[splittedArr.length - 5] == 'w'
       ? Player.WHITE
