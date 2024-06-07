@@ -3,7 +3,9 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  HostListener,
   Input,
+  OnDestroy,
   Output,
   ViewChild,
 } from '@angular/core';
@@ -19,7 +21,7 @@ import { OnlineGameState } from 'src/types/OnlineGameState';
   templateUrl: './room.component.html',
   styleUrls: ['./room.component.css'],
 })
-export class RoomComponent implements AfterViewInit {
+export class RoomComponent implements AfterViewInit, OnDestroy {
   @ViewChild('board') boardView: ElementRef<HTMLIFrameElement> | undefined;
   @Input() gameId: string | null = null;
   @Input() isCreator: boolean = false;
@@ -76,26 +78,8 @@ export class RoomComponent implements AfterViewInit {
   }
 
   private processGameEvent({ fen, ready, checkmate, turn }: OnlineGameState) {
-    if (
-      this.gameService.gameState.fen !== fen ||
-      this.gameService.gameState.checkmate !== checkmate
-    )
-      this.handleFenUpdate({ fen, checkmate });
-    if (this._isReady !== ready) this.handleReadinessUpdate({ ready });
-  }
-
-  private handleFenUpdate({
-    fen,
-    checkmate,
-  }: {
-    fen: string;
-    checkmate: boolean;
-  }) {
-    if (this.isGameReady) this.gameService.processMove({ fen, checkmate });
-  }
-
-  private handleReadinessUpdate({ ready }: { ready: boolean }) {
     this._isReady = ready;
+    this.gameService.processMove({ fen, checkmate });
   }
 
   get playerType(): Player {
@@ -130,5 +114,14 @@ export class RoomComponent implements AfterViewInit {
       checkmate: false,
       turn: Player.WHITE,
     });
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadHandler(event: Event) {
+    this.handleLeave();
+  }
+
+  ngOnDestroy() {
+    this.handleLeave();
   }
 }
