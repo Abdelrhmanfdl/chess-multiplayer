@@ -16,7 +16,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 ![Image](./assets/3.png)
 ![Image](./assets/4.png)
 
-## TODOS
+## TODO
 
 - [ ] Handle unexpected leave or shutdown
 
