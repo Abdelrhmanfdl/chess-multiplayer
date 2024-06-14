@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
-import { OnlineGameState } from './OnlineGameState';
+import { GameState } from './GameState';
 
 export type JoinOnlineGameEvent = {
-  gameObservable: Observable<OnlineGameState>;
+  gameObservable: Observable<GameState>;
   gameId: string;
   isCreator: boolean;
 };

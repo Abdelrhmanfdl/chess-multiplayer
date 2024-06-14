@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { Observable, firstValueFrom, of, switchMap } from 'rxjs';
 import { JoinError } from 'src/enums/JoinError';
-import { OnlineGameState } from 'src/types/OnlineGameState';
+import { GameState } from 'src/types/GameState';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,7 @@ export class OnlineGameService {
 
   async createGame(): Promise<string> {
     const gameId = this.db.createPushId();
-    const newGame: OnlineGameState = {
+    const newGame: GameState = {
       fen: null,
       checkmate: false,
       ready: false,
@@ -23,9 +23,9 @@ export class OnlineGameService {
       .then(() => gameId);
   }
 
-  async joinGame(gameId: string): Promise<Observable<OnlineGameState>> {
+  async joinGame(gameId: string): Promise<Observable<GameState>> {
     const result = await firstValueFrom(
-      this.db.object<OnlineGameState>(`game/${gameId}`).valueChanges()
+      this.db.object<GameState>(`game/${gameId}`).valueChanges()
     );
 
     if (!result) {
@@ -43,7 +43,7 @@ export class OnlineGameService {
     return this.db.object(`game/${gameId}`).valueChanges();
   }
 
-  updateGame(gameId: string, newState: OnlineGameState): Promise<void> {
+  updateGame(gameId: string, newState: GameState): Promise<void> {
     return this.db
       .object(`game/${gameId}`)
       .update(newState)

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { OnlineGameService } from 'src/app/online-game.service';
 import { JoinError } from 'src/enums/JoinError';
 import { JoinOnlineGameEvent } from 'src/types/JoinOnlineGameEvent';
-import { OnlineGameState } from 'src/types/OnlineGameState';
+import { GameState } from 'src/types/GameState';
 
 @Component({
   selector: 'app-online-menu',
@@ -25,7 +25,7 @@ export class MenuComponent {
 
   joinGame(gameId: string) {
     this.observeGame(gameId)
-      .then((gameObservable: Observable<OnlineGameState>) => {
+      .then((gameObservable: Observable<GameState>) => {
         this.joinedGame.emit({ gameObservable, isCreator: false, gameId });
       })
       .catch((err) => {
@@ -36,7 +36,7 @@ export class MenuComponent {
       });
   }
 
-  private async observeGame(gameId): Promise<Observable<OnlineGameState>> {
+  private async observeGame(gameId): Promise<Observable<GameState>> {
     return this.onlineGameService.joinGame(gameId);
   }
 }

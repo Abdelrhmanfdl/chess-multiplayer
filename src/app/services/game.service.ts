@@ -1,7 +1,7 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { GameEvent } from 'src/enums/GameEvent';
 import { Player } from 'src/enums/Player';
-import { OnlineGameState } from 'src/types/OnlineGameState';
+import { GameState } from 'src/types/GameState';
 
 type BoardData = { iframe: ElementRef<HTMLIFrameElement>; playerType: Player };
 
@@ -10,11 +10,11 @@ type BoardData = { iframe: ElementRef<HTMLIFrameElement>; playerType: Player };
 })
 export class GameService {
   private _boardsLits: BoardData[];
-  private _gameState: OnlineGameState = {};
+  private _gameState: GameState = {};
 
   constructor() {}
 
-  initState(gameState: OnlineGameState) {
+  initState(gameState: GameState) {
     if ('turn' in gameState) this._gameState.turn = gameState.turn;
     if ('fen' in gameState) this._gameState.fen = gameState.fen;
     if ('checkmate' in gameState)
@@ -68,7 +68,7 @@ export class GameService {
     });
   }
 
-  get gameState(): OnlineGameState {
+  get gameState(): GameState {
     return this._gameState;
   }
 

@@ -1,6 +1,6 @@
 import { Player } from 'src/enums/Player';
 
-export type OnlineGameState = {
+export type GameState = {
   fen?: string;
   ready?: boolean;
   checkmate?: boolean;

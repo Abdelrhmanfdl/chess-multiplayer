@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { OnlineGameState } from 'src/types/OnlineGameState';
+import { GameState } from 'src/types/GameState';
 import { OnlineGameService } from '../online-game.service';
 import { JoinOnlineGameEvent } from 'src/types/JoinOnlineGameEvent';
 import { Observable } from 'rxjs';
@@ -13,7 +13,7 @@ import { Player } from 'src/enums/Player';
 export class OnlineComponent {
   gameId: string | null = null;
   isCreator: boolean = false;
-  gameObservable: Observable<OnlineGameState> | null = null;
+  gameObservable: Observable<GameState> | null = null;
 
   constructor(private onlineGameService: OnlineGameService) {}
 

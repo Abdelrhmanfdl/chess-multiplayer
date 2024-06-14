@@ -14,7 +14,7 @@ import { OnlineGameService } from 'src/app/online-game.service';
 import { GameService } from 'src/app/services/game.service';
 import { GameEvent } from 'src/enums/GameEvent';
 import { Player } from 'src/enums/Player';
-import { OnlineGameState } from 'src/types/OnlineGameState';
+import { GameState } from 'src/types/GameState';
 
 @Component({
   selector: 'app-online-room',
@@ -25,7 +25,7 @@ export class RoomComponent implements AfterViewInit, OnDestroy {
   @ViewChild('board') boardView: ElementRef<HTMLIFrameElement> | undefined;
   @Input() gameId: string | null = null;
   @Input() isCreator: boolean = false;
-  _gameObservable: Observable<OnlineGameState> | null = null;
+  _gameObservable: Observable<GameState> | null = null;
   _gameSubscription: Subscription = null;
   _isReady: boolean = false;
   @Output() leaveRoom = new EventEmitter<void>();
@@ -37,7 +37,7 @@ export class RoomComponent implements AfterViewInit, OnDestroy {
     if (this._gameSubscription) this._gameSubscription.unsubscribe();
 
     this._gameSubscription = this._gameObservable.subscribe(
-      (gameStateUpdate: OnlineGameState | null) =>
+      (gameStateUpdate: GameState | null) =>
         gameStateUpdate === null
           ? this.handleLeave()
           : this.processGameEvent(gameStateUpdate)
@@ -77,7 +77,7 @@ export class RoomComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  private processGameEvent({ fen, ready, checkmate, turn }: OnlineGameState) {
+  private processGameEvent({ fen, ready, checkmate, turn }: GameState) {
     this._isReady = ready;
     this.gameService.processMove({ fen, checkmate });
   }
