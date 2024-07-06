@@ -2,8 +2,6 @@
 
 <a href="https://chess-multiplayer-a8872.web.app/" target="_blank">URL</a>
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.14.
-
 # Screenshots
 
 ### Local Mode
